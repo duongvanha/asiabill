@@ -5,20 +5,17 @@
  */
 
 /**
- * Get the color as an array of red, green, and blue values, represented as
- * decimal numbers between 0 and 1.
+ * Payment gateway need payload config credential -> get from ShopBase
  *
  * @function
- * @param {paymentGatewayPayload} payload
+ * @param {Object} payload
  * @name PaymentGateway#constructor
  */
 
 /**
- * Get the color as an array of red, green, and blue values, represented as
- * decimal numbers between 0 and 1.
- *
+ * Get order response represent data will submit to gateway
  * @function
  * @param {orderRequest} orderRequest
- * @name PaymentGateway#createOrder
- * @returns {Object}
+ * @name PaymentGateway#getDataCreateOrder
+ * @returns {Promise<orderResponse>}
  */
