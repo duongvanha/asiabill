@@ -18,16 +18,6 @@ const schemaOrderRequest = Joi.object().keys({
 
   shippingAddress: schemaAddress.required(),
   billingAddress: schemaAddress.required(),
-
-  // form.append('isMobile', 'my value');
-  // form.append('interfaceInfo', 'my value');
-  // form.append('remark', 'my value');
-  // form.append('paymentMethod', PaymentMethod);
-
-  // form.append('returnUrl', 'my value');
-  // form.append('callbackUrl', 'my value');
-  // form.append('goods_detail', 'my value');
-  // form.append('signInfo', 'my value');
 });
 
 module.exports = schemaOrderRequest;
