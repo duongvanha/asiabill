@@ -17,5 +17,5 @@
  * @function
  * @param {orderRequest} orderRequest
  * @name PaymentGateway#getDataCreateOrder
- * @returns {Promise<orderResponse>}
+ * @returns {Promise<redirectRequest>}
  */

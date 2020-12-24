@@ -1,6 +1,12 @@
 const schemaOrderRequest = require('./orderRequest');
 const schemaCredential = require('./credential');
-const {UrlLiveMore, UrlTestMode, PaymentMethod} = require('./constant');
+const sign = require('./signHelper');
+const {
+  URL_LIVE_MODE,
+  URL_TEST_MODE,
+  PAYMENT_METHOD,
+  INTERFACE_INFO,
+} = require('./constant');
 
 /**
  * Class representing a AsianBill gateway.
@@ -10,6 +16,7 @@ const {UrlLiveMore, UrlTestMode, PaymentMethod} = require('./constant');
  */
 class AsiaBillPaymentGateway {
   /**
+   * @throws {Joi.ValidationError} will throw when validate fail
    * @function
    * @param {AsiaBillCredential} payload
    */
@@ -23,11 +30,12 @@ class AsiaBillPaymentGateway {
 
   /**
    * @public
+   * @throws {Joi.ValidationError} will throw when validate fail
    * @param {orderRequest} orderRequest
-   * @return {Promise<orderResponse>}
+   * @return {Promise<redirectRequest>}
    */
   async getDataCreateOrder(orderRequest) {
-    const orderRequestValidated = await schemaOrderRequest.validateAsync(
+    const orderReqValid = await schemaOrderRequest.validateAsync(
         orderRequest, {
           allowUnknown: true,
         },
@@ -37,34 +45,31 @@ class AsiaBillPaymentGateway {
       data: {
         merNo: this.payload.merNo,
         gatewayNo: this.payload.gatewayNo,
-        // orderNo: 'my value',
-        orderCurrency: orderRequestValidated.currency,
-        orderAmount: orderRequestValidated.amount,
-        returnUrl: 'my value',
-        callbackUrl: 'my value',
-        // isMobile: 'my value',
-        // interfaceInfo: 'my value',
-        goods_detail: 'my value',
-        signInfo: 'my value',
-        // remark: 'my value',
-        paymentMethod: PaymentMethod,
-        firstName: orderRequestValidated.firstName,
-        lastName: orderRequestValidated.lastName,
-        email: orderRequestValidated.email,
-        phone: orderRequestValidated.billingAddress.phone,
-        country: orderRequestValidated.billingAddress.country,
-        state: orderRequestValidated.billingAddress.state,
-        city: orderRequestValidated.billingAddress.city,
-        address: orderRequestValidated.billingAddress.line1,
-        zip: orderRequestValidated.billingAddress.postal_code,
-        shipFirstName: orderRequestValidated.firstName,
-        shipLastName: orderRequestValidated.lastName,
-        shipPhone: orderRequestValidated.shippingAddress.phone,
-        shipCountry: orderRequestValidated.shippingAddress.country,
-        shipState: orderRequestValidated.shippingAddress.state,
-        shipCity: orderRequestValidated.shippingAddress.city,
-        shipAddress: orderRequestValidated.shippingAddress.line1,
-        shipZip: orderRequestValidated.shippingAddress.postal_code,
+        orderNo: orderRequest.reference,
+        orderCurrency: orderReqValid.currency,
+        orderAmount: orderReqValid.amount,
+        returnUrl: orderReqValid.returnUrl,
+        callbackUrl: orderReqValid.callbackUrl,
+        interfaceInfo: INTERFACE_INFO,
+        signInfo: await sign(this.payload, orderReqValid, this.payload.signKey),
+        paymentMethod: PAYMENT_METHOD,
+        firstName: orderReqValid.firstName,
+        lastName: orderReqValid.lastName,
+        email: orderReqValid.email,
+        phone: orderReqValid.billingAddress.phone,
+        country: orderReqValid.billingAddress.country,
+        state: orderReqValid.billingAddress.state,
+        city: orderReqValid.billingAddress.city,
+        address: orderReqValid.billingAddress.line1,
+        zip: orderReqValid.billingAddress.postal_code,
+        shipFirstName: orderReqValid.firstName,
+        shipLastName: orderReqValid.lastName,
+        shipPhone: orderReqValid.shippingAddress.phone,
+        shipCountry: orderReqValid.shippingAddress.country,
+        shipState: orderReqValid.shippingAddress.state,
+        shipCity: orderReqValid.shippingAddress.city,
+        shipAddress: orderReqValid.shippingAddress.line1,
+        shipZip: orderReqValid.shippingAddress.postal_code,
       },
       url: this.urlApi,
     };
@@ -76,10 +81,10 @@ class AsiaBillPaymentGateway {
    */
   get urlApi() {
     if (this.payload.isTestMode) {
-      return UrlTestMode;
+      return URL_TEST_MODE;
     }
 
-    return UrlLiveMore;
+    return URL_LIVE_MODE;
   }
 }
 

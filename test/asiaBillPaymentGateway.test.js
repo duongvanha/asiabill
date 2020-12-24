@@ -73,7 +73,7 @@ test('make AsianBill asiabill config should success', () => {
   expect(new AsiaBill(credential)).toBeInstanceOf(AsiaBill);
 });
 
-test('AsianBill create order wrong request should throw error', () => {
+describe('AsianBill create order wrong request should throw error', () => {
   const mapExpect = new Map([
     [orderRequest, '"value" must be of type object'],
 
@@ -120,9 +120,12 @@ test('AsianBill create order wrong request should throw error', () => {
       {...orderRequest, billingAddress: {...address, phone: 123}},
       '"billingAddress.phone" must be a string'],
     [
-      {...orderRequest, billingAddress: {...address, phone: 'a'.padStart(51)}},
+      {
+        ...orderRequest,
+        billingAddress: {...address, phone: 'a'.padStart(51)},
+      },
       '"billingAddress.phone" length must be less than or equal to 50' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, billingAddress: {...address, country: null}},
       '"billingAddress.country" must be a string'],
@@ -135,7 +138,7 @@ test('AsianBill create order wrong request should throw error', () => {
         billingAddress: {...address, country: 'a'.padStart(1001)},
       },
       '"billingAddress.country" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, billingAddress: {...address, state: null}},
       '"billingAddress.state" must be a string'],
@@ -148,7 +151,7 @@ test('AsianBill create order wrong request should throw error', () => {
         billingAddress: {...address, state: 'a'.padStart(1001)},
       },
       '"billingAddress.state" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, billingAddress: {...address, city: null}},
       '"billingAddress.city" must be a string'],
@@ -161,7 +164,7 @@ test('AsianBill create order wrong request should throw error', () => {
         billingAddress: {...address, city: 'a'.padStart(101)},
       },
       '"billingAddress.city" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, billingAddress: {...address, line1: null}},
       '"billingAddress.line1" must be a string'],
@@ -174,7 +177,7 @@ test('AsianBill create order wrong request should throw error', () => {
         billingAddress: {...address, line1: 'a'.padStart(501)},
       },
       '"billingAddress.line1" length must be less than or equal to 500' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, billingAddress: {...address, postal_code: null}},
       '"billingAddress.postal_code" must be a string'],
@@ -187,7 +190,7 @@ test('AsianBill create order wrong request should throw error', () => {
         billingAddress: {...address, postal_code: 'a'.padStart(101)},
       },
       '"billingAddress.postal_code" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: undefined},
       '"shippingAddress" is required'],
@@ -201,9 +204,12 @@ test('AsianBill create order wrong request should throw error', () => {
       {...orderRequest, shippingAddress: {...address, phone: 123}},
       '"shippingAddress.phone" must be a string'],
     [
-      {...orderRequest, shippingAddress: {...address, phone: 'a'.padStart(51)}},
+      {
+        ...orderRequest,
+        shippingAddress: {...address, phone: 'a'.padStart(51)},
+      },
       '"shippingAddress.phone" length must be less than or equal to 50' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: {...address, country: null}},
       '"shippingAddress.country" must be a string'],
@@ -216,7 +222,7 @@ test('AsianBill create order wrong request should throw error', () => {
         shippingAddress: {...address, country: 'a'.padStart(1001)},
       },
       '"shippingAddress.country" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: {...address, state: null}},
       '"shippingAddress.state" must be a string'],
@@ -229,7 +235,7 @@ test('AsianBill create order wrong request should throw error', () => {
         shippingAddress: {...address, state: 'a'.padStart(1001)},
       },
       '"shippingAddress.state" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: {...address, city: null}},
       '"shippingAddress.city" must be a string'],
@@ -242,7 +248,7 @@ test('AsianBill create order wrong request should throw error', () => {
         shippingAddress: {...address, city: 'a'.padStart(101)},
       },
       '"shippingAddress.city" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: {...address, line1: null}},
       '"shippingAddress.line1" must be a string'],
@@ -255,7 +261,7 @@ test('AsianBill create order wrong request should throw error', () => {
         shippingAddress: {...address, line1: 'a'.padStart(501)},
       },
       '"shippingAddress.line1" length must be less than or equal to 500' +
-      ' characters long'],
+        ' characters long'],
     [
       {...orderRequest, shippingAddress: {...address, postal_code: null}},
       '"shippingAddress.postal_code" must be a string'],
@@ -268,15 +274,17 @@ test('AsianBill create order wrong request should throw error', () => {
         shippingAddress: {...address, postal_code: 'a'.padStart(101)},
       },
       '"shippingAddress.postal_code" length must be less than or equal to 100' +
-      ' characters long'],
+        ' characters long'],
   ]);
 
   for (const [request, error] of mapExpect.entries()) {
-    expect(new AsiaBill(credential).getDataCreateOrder(request)).
-        rejects.
-        toThrow(error);
+    new AsiaBill(credential).getDataCreateOrder(request).catch((err) => {
+      expect(err.message).toBe(error);
+    });
   }
-});
+},
+);
+
 
 describe('AsiaBill create order', () => {
   test('should return url live mode', async () => {
@@ -297,38 +305,39 @@ describe('AsiaBill create order', () => {
   });
 
   test('should create success with data match', async () => {
-    const result = await (new AsiaBill(credential)).getDataCreateOrder(
-        orderRequest);
-
-    expect(result.data).toStrictEqual({
-      merNo: credential.merNo,
-      gatewayNo: credential.gatewayNo,
-      // orderNo: 'my value',
-      orderCurrency: orderRequest.currency,
-      orderAmount: orderRequest.amount,
-      returnUrl: 'my value',
-      callbackUrl: 'my value',
-      // interfaceInfo: 'my value',
-      // goods_detail: 'my value',
-      signInfo: 'my value',
-      paymentMethod: PaymentMethod,
-      firstName: orderRequest.firstName,
-      lastName: orderRequest.lastName,
-      email: orderRequest.email,
-      phone: orderRequest.billingAddress.phone,
-      country: orderRequest.billingAddress.country,
-      state: orderRequest.billingAddress.state,
-      city: orderRequest.billingAddress.city,
-      address: orderRequest.billingAddress.line1,
-      zip: orderRequest.billingAddress.postal_code,
-      shipFirstName: orderRequest.firstName,
-      shipLastName: orderRequest.lastName,
-      shipPhone: orderRequest.shippingAddress.phone,
-      shipCountry: orderRequest.shippingAddress.country,
-      shipState: orderRequest.shippingAddress.state,
-      shipCity: orderRequest.shippingAddress.city,
-      shipAddress: orderRequest.shippingAddress.line1,
-      shipZip: orderRequest.shippingAddress.postal_code,
+    const asiaBill = new AsiaBill(credential);
+    // try {
+    await asiaBill.getDataCreateOrder(orderRequest).then(({data}) => {
+      expect(data).toStrictEqual({
+        merNo: credential.merNo,
+        gatewayNo: credential.gatewayNo,
+        // orderNo: 'my value',
+        orderCurrency: orderRequest.currency,
+        orderAmount: orderRequest.amount,
+        returnUrl: 'my value',
+        callbackUrl: 'my value',
+        // interfaceInfo: 'my value',
+        // goods_detail: 'my value',
+        signInfo: 'my value',
+        paymentMethod: PaymentMethod,
+        firstName: orderRequest.firstName,
+        lastName: orderRequest.lastName,
+        email: orderRequest.email,
+        phone: orderRequest.billingAddress.phone,
+        country: orderRequest.billingAddress.country,
+        state: orderRequest.billingAddress.state,
+        city: orderRequest.billingAddress.city,
+        address: orderRequest.billingAddress.line1,
+        zip: orderRequest.billingAddress.postal_code,
+        shipFirstName: orderRequest.firstName,
+        shipLastName: orderRequest.lastName,
+        shipPhone: orderRequest.shippingAddress.phone,
+        shipCountry: orderRequest.shippingAddress.country,
+        shipState: orderRequest.shippingAddress.state,
+        shipCity: orderRequest.shippingAddress.city,
+        shipAddress: orderRequest.shippingAddress.line1,
+        shipZip: orderRequest.shippingAddress.postal_code,
+      });
     });
   });
 });

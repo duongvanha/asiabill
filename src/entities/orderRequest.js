@@ -19,9 +19,13 @@
  @property {customerAddress} shippingAddress Shipping information for order.
  @property {string} currency The three-character ISO-4217 currency code that identifies the currency.
  @property {number} amount
- @property {string} returnUrl
  @property {string} firstName
  @property {string} lastName
  @property {string} email
+ @property {string} returnUrl
+ @property {string} callbackUrl
+ @property {string} shopName
+ @property {string} reference
+ @property {number} accountId
  */
 
