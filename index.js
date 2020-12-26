@@ -6,8 +6,6 @@ const bodyParser = require('body-parser');
 const logger = require('./src/lib/logger');
 const asianBillRouter = require('./router');
 
-console.log(process.env);
-
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
