@@ -13,6 +13,14 @@
  */
 
 /**
+ @typedef urlObject
+ @type {Object}
+ @property {string} cancelUrl
+ @property {string} returnUrl
+ @property {string} callbackUrl
+ */
+
+/**
  @typedef orderRequest
  @type {Object}
  @property {customerAddress} billingAddress Billing information for order.
@@ -22,8 +30,8 @@
  @property {string} firstName
  @property {string} lastName
  @property {string} email
- @property {string} returnUrl
- @property {string} callbackUrl
+ @property {urlObject} urlObject
+ @property {boolean} isPostPurchase
  @property {string} shopName
  @property {string} reference
  @property {number} accountId

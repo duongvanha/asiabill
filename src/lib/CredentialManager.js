@@ -21,8 +21,8 @@ class CredentialManager {
     //   console.log(res);
     // });
     return Promise.resolve({
-      gatewayNo: '10000007',
-      merNo: '10000',
+      gatewayNo: '12318001',
+      merNo: '12318',
       isTestMode: true,
       signKey: '12345678',
     });
@@ -34,7 +34,7 @@ class CredentialManager {
    * @return {string}
    */
   getCacheKeyById(id) {
-    return `${process.env.CACHE_KEY}/${id}`;
+    return `${process.env.CACHE_KEY_URL}/${id}`;
   }
 }
 

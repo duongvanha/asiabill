@@ -5,17 +5,53 @@
  */
 
 /**
- * Payment gateway need payload config credential -> get from ShopBase
+ * Set config credential -> get from ShopBase
  *
+ * @throws {Joi.ValidationError}
  * @function
- * @param {Object} payload
- * @name PaymentGateway#constructor
+ * @param {Object} credential
+ * @name PaymentGateway#setCredential
  */
 
 /**
- * Get order response represent data will submit to gateway
+ *
+ * @throws {Joi.ValidationError}
+ * @public
+ * @param {Object} body
+ * @name PaymentGateway#getAccountIdFromResponseGateway
+ * @return {number}
+ */
+
+/**
+ *
+ * @throws {Joi.ValidationError}
+ * @function
+ * @param {Object} body
+ * @name PaymentGateway#getRefFromResponseGateway
+ * @return {string}
+ */
+
+/**
+ *
+ * @throws {Joi.ValidationError}
+ * @function
+ * @param {Object} body
+ * @name PaymentGateway#isPostPurchase
+ * @return {boolean}
+ */
+
+/**
+ * Get accountId from body response gateway
  * @function
  * @param {orderRequest} orderRequest
  * @name PaymentGateway#getDataCreateOrder
  * @returns {Promise<redirectRequest>}
+ */
+
+/**
+ * @function
+ * @throws {Joi.ValidationError, SignInvalidError}
+ * @param {Object} body
+ * @name PaymentGateway#getOrderResponse
+ * @return {Promise<orderResponse>}
  */
