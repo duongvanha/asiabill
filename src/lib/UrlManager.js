@@ -42,7 +42,7 @@ class UrlManager {
    * @return {Promise<urlObject>}
    */
   getUrlObject(ref, isPortPurchase) {
-    const key = this.getCacheKeyByOrderNo(ref, true);
+    const key = this.getCacheKeyByOrderNo(ref, isPortPurchase);
     return this.redis.get(key).then((rs) => {
       if (rs == null) {
         throw new Error(`cannot get url object with ref ${ref}`);
