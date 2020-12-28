@@ -28,7 +28,7 @@ class UrlManager {
 
     return {
       // url define in file router.js
-      completeUrl: `${process.env.HOST}/provider-confirm`,
+      returnUrl: `${process.env.HOST}/provider-confirm`,
       callbackUrl: `${process.env.HOST}/provider-webhook`,
       cancelUrl: `${process.env.HOST}/cancel-url`,
     };
