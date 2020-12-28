@@ -25,7 +25,7 @@ class ShopBaseSigner {
           return `${previousValue}${key}${val}`;
         }), '');
 
-    return crypto.createHmac('sha256', process.env.SHOPBASE_PAYMENT_KEY).
+    return crypto.createHmac('sha256', process.env.SHOPBASE_PAYMENT_KEY || '').
         update(msg).digest('hex');
   }
 
